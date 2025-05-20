@@ -1,100 +1,85 @@
+/* Базовые стили для всех устройств */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     background-color: #f5f5f5;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 .container {
-    max-width: 800px;
+    width: 100%;
     margin: 0 auto;
     background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1,
-h2 {
-    color: #2c3e50;
-}
-
-.form-section {
-    margin-bottom: 20px;
     padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    color: #2c3e50;
+    word-wrap: break-word;
+}
+
+h2 {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+/* Стили для форм и элементов ввода */
+.form-section {
+    margin-bottom: 15px;
+    padding: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
 }
 
 .form-row {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
 }
 
 .form-row label {
-    width: 50%;
-    margin-right: 10px;
+    margin-bottom: 5px;
     font-weight: bold;
-}
-
-#heatingLoadSection .form-row label {
-    width: 70%;
+    width: 100% !important;
 }
 
 .form-row input,
 .form-row select {
-    flex: 1;
+    width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-#hourlyLoad {
-    flex: 2;
-    min-width: 300px;
+    box-sizing: border-box;
+    font-size: 14px;
 }
 
 .date-range {
     display: flex;
     align-items: center;
-    flex: 1;
+    gap: 5px;
+    width: 100%;
 }
 
 .date-range input {
     flex: 1;
+    min-width: 0;
 }
 
 .date-range span {
-    margin: 0 10px;
-}
-
-.hidden {
-    display: none;
-}
-
-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #2980b9;
-}
-
-.result-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 18px;
-    padding: 10px;
-    background-color: #e8f4fc;
-    border-radius: 4px;
+    white-space: nowrap;
 }
 
 input[readonly] {
@@ -102,88 +87,69 @@ input[readonly] {
     cursor: not-allowed;
 }
 
-sup {
-    font-size: 0.8em;
-    vertical-align: super;
-}
-
-.formula-display,
-.result-display {
-    flex: 1;
-    padding: 8px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-height: 20px;
-}
-
-#qMax {
-    flex: 1;
-    max-width: 150px;
-}
-
-.formula-container {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 10px;
-    border: 1px solid #dee2e6;
-}
-
-.formula-expression {
-    font-family: monospace;
-    padding: 10px;
-    background-color: white;
-    margin: 10px 0;
-    border-left: 3px solid #3498db;
-    white-space: pre-wrap;
-}
-
-.formula-result {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#qMax {
-    flex: 1;
-    max-width: 150px;
-}
-
-#calculateOldMethod {
-    margin-left: 10px;
-    padding: 8px 15px;
-    background-color: #28a745;
+/* Стили для кнопок */
+button {
+    background-color: #3498db;
     color: white;
     border: none;
+    padding: 10px 12px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 5px;
+    box-sizing: border-box;
 }
 
-#calculateOldMethod:hover {
+button:hover {
+    background-color: #2980b9;
+}
+
+#calculateOldMethod,
+#calculatePeriod,
+.calculate-loss-btn {
+    background-color: #28a745;
+}
+
+#calculateOldMethod:hover,
+#calculatePeriod:hover,
+.calculate-loss-btn:hover {
     background-color: #218838;
 }
 
-#oldMethodResult {
-    margin-top: 15px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border: 1px solid #dee2e6;
+#cleanNetworkSection {
+    background-color: #dc3545;
 }
 
+#cleanNetworkSection:hover {
+    background-color: #c82333;
+}
+
+/* Стили для скрытых элементов */
+.hidden {
+    display: none;
+}
+
+/* Стили для формул и результатов */
 .formula-container {
-    background-color: white;
+    background-color: #f8f9fa;
     padding: 10px;
-    border-radius: 3px;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #dee2e6;
+    font-size: 13px;
+    overflow-x: auto;
 }
 
 .formula-expression {
     font-family: monospace;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 8px;
+    background-color: white;
+    margin: 8px 0;
     border-left: 3px solid #3498db;
     white-space: pre-wrap;
-    background-color: #f8f9fa;
+    font-size: 13px;
+    word-break: break-all;
 }
 
 .formula-result {
@@ -191,70 +157,95 @@ sup {
     color: #2c3e50;
 }
 
+/* Стили для таблицы */
 #consumptionTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 #consumptionTable th,
 #consumptionTable td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 6px;
     text-align: center;
 }
 
 #consumptionTable th {
     background-color: #f2f2f2;
     font-weight: bold;
+    position: sticky;
+    left: 0;
 }
 
 #consumptionTable tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-#consumptionTable tr:hover {
-    background-color: #f1f1f1;
+/* Стили для секций тепловой сети */
+.add-network-section {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-#calculatePeriod {
-    margin-left: 10px;
-    padding: 8px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
+.add-network-section label {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.add-network-section button {
+    flex: 1;
+    min-width: 80px;
+}
+
+.network-section {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    border: 1px solid #d1e0e0;
+}
+
+.result-row {
+    padding: 8px;
+    background-color: #e8f4fc;
     border-radius: 4px;
-    cursor: pointer;
+    margin-top: 8px;
+    font-size: 13px;
 }
 
-#calculatePeriod:hover {
-    background-color: #218838;
+/* Стили для строки с тарифом */
+.tariff-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
 }
 
-/* Специальные стили для мобильных устройств */
-@media (max-width: 480px) {
-    #consumptionTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .form-section {
-        padding: 8px;
-    }
-
-    .container {
-        padding: 10px;
-    }
+.tariff-row label {
+    width: 100%;
 }
 
-/* Медиа-запросы для адаптации */
-@media (min-width: 768px) {
-    body {
-        padding: 20px;
-        font-size: 16px;
-    }
+.tariff-row input {
+    flex: 1;
+    min-width: 100px;
+}
 
+.tariff-row button {
+    flex: 1;
+}
+
+/* Медиа-запрос для устройств с шириной экрана более 480px */
+@media (min-width: 480px) {
     .container {
         max-width: 800px;
         padding: 20px;
@@ -267,8 +258,8 @@ sup {
 
     .form-row label {
         width: 50%;
-        margin-right: 10px;
         margin-bottom: 0;
+        margin-right: 10px;
     }
 
     #heatingLoadSection .form-row label {
@@ -277,8 +268,8 @@ sup {
 
     .form-row input,
     .form-row select {
-        flex: 1;
         width: auto;
+        flex: 1;
     }
 
     button {
@@ -287,154 +278,46 @@ sup {
         margin-left: 10px;
     }
 
+    .tariff-row label {
+        width: auto;
+        flex: 0 0 150px;
+    }
+
+    .add-network-section label {
+        width: auto;
+        flex-grow: 1;
+    }
+
     #consumptionTable {
         font-size: 14px;
+        display: table;
+        white-space: normal;
     }
 }
 
-/* Стили для строки с тарифом и кнопкой */
-.tariff-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    /* Равное расстояние между элементами */
-    flex-wrap: wrap;
-    /* Для адаптивности на маленьких экранах */
-    margin-top: 10px;
-}
-
-.tariff-row label {
-    width: auto;
-    /* Отменяем фиксированную ширину */
-    margin-right: 0;
-    /* Убираем отступ */
-    flex: 0 0 150px;
-    /* Фиксированная ширина для label */
-}
-
-.tariff-row input {
-    flex: 1;
-    /* Занимает доступное пространство */
-    max-width: 150px;
-    /* Максимальная ширина поля ввода */
-}
-
-.tariff-row button {
-    flex: 0 0 auto;
-    /* Кнопка не растягивается */
-    white-space: nowrap;
-    /* Текст не переносится */
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 480px) {
-    .tariff-row {
-        gap: 10px;
+/* Медиа-запрос для устройств с шириной экрана более 768px */
+@media (min-width: 768px) {
+    body {
+        padding: 20px;
+        font-size: 16px;
     }
 
-    .tariff-row label {
-        flex: 0 0 100%;
+    h1 {
+        font-size: 1.8rem;
     }
 
-    .tariff-row input {
-        max-width: none;
-        flex: 1 1 100%;
+    h2 {
+        font-size: 1.5rem;
     }
 
-    .tariff-row button {
-        flex: 1 1 100%;
+    .form-row input,
+    .form-row select {
+        padding: 10px;
+        font-size: 16px;
     }
-}
 
-/* Добавьте в конец файла styles.css */
-.add-network-section {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-}
-
-#addNetworkSection {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#addNetworkSection:hover {
-    background-color: #45a049;
-}
-
-.network-section {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f8ff;
-    border-radius: 5px;
-    border: 1px solid #d1e0e0;
-}
-
-.network-section h3 {
-    margin-top: 0;
-    color: #2c3e50;
-}
-
-.calculate-loss-btn {
-    background-color: #2196F3;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.calculate-loss-btn:hover {
-    background-color: #0b7dda;
-}
-
-.result-row {
-    padding: 10px;
-    background-color: #e8f4fc;
-    border-radius: 4px;
-    margin-top: 10px;
-}
-
-.result-row small {
-    display: block;
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 5px;
-}
-
-.result-row label {
-    white-space: normal;
-    line-height: 1.4;
-}
-
-#cleanNetworkSection {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 10px;
-}
-
-#cleanNetworkSection:hover {
-    background-color: #c82333;
-}
-
-.add-network-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.add-network-section label {
-    margin-bottom: 0;
-    flex-grow: 1;
+    button {
+        padding: 12px 15px;
+        font-size: 16px;
+    }
 }
