@@ -165,7 +165,7 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
         }
 
         const totalConsumptionRow = consumption + networkLoss;
-        const sumWithVAT = (totalConsumptionRow * tariff * 1.2).toFixed(2);
+        const sumWithVAT = (totalConsumptionRow * tariff * 1.22).toFixed(2);
 
         totalConsumption += consumption;
         totalNetworkLoss += networkLoss;
@@ -236,7 +236,7 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
             }
 
             const totalConsumptionRow = consumption + networkLoss;
-            const sumWithVAT = (totalConsumptionRow * tariff * 1.2).toFixed(2);
+            const sumWithVAT = (totalConsumptionRow * tariff * 1.22).toFixed(2);
 
             totalConsumption += consumption;
             totalNetworkLoss += networkLoss;
