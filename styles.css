@@ -66,6 +66,36 @@ h3 {
     font-size: 14px;
 }
 
+/* Стили для автоматического расширения полей ввода */
+.auto-expand-input {
+    min-width: 100px;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: width 0.1s ease;
+}
+
+.auto-expand-input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.auto-expand-input-wrapper input {
+    flex: 1;
+    min-width: 100px;
+}
+
+/* Дополнительно для лучшего вида на мобильных устройствах */
+@media (max-width: 480px) {
+    .auto-expand-input-wrapper input {
+        min-width: 80px;
+        font-size: 14px;
+    }
+}
+/* ------------------------------- */
+
 .date-range {
     display: flex;
     align-items: center;
@@ -86,6 +116,8 @@ input[readonly] {
     background-color: #f0f0f0;
     cursor: not-allowed;
 }
+
+
 
 /* Стили для кнопок */
 button {
@@ -123,6 +155,15 @@ button:hover {
 
 #cleanNetworkSection:hover {
     background-color: #c82333;
+}
+
+/* Стили для кнопки расчета жилых помещений */
+#calculateResidentialBtn {
+    background-color: #28a745;
+}
+
+#calculateResidentialBtn:hover {
+    background-color: #218838;
 }
 
 /* Стили для скрытых элементов */
@@ -186,6 +227,35 @@ button:hover {
     background-color: #f9f9f9;
 }
 
+/* Стили для таблицы жилых помещений */
+#residentialConsumptionTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#residentialConsumptionTable th,
+#residentialConsumptionTable td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
+}
+
+#residentialConsumptionTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    position: sticky;
+    left: 0;
+}
+
+#residentialConsumptionTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
 /* Стили для секций тепловой сети */
 .add-network-section {
     margin-top: 15px;
@@ -244,6 +314,7 @@ button:hover {
     flex: 1;
 }
 
+
 /* Медиа-запрос для устройств с шириной экрана более 480px */
 @media (min-width: 480px) {
     .container {
@@ -293,6 +364,25 @@ button:hover {
         display: table;
         white-space: normal;
     }
+
+    #residentialConsumptionTable {
+        font-size: 14px;
+        display: table;
+        white-space: normal;
+    }
+}
+
+/* Дополнительные стили для таблицы жилых помещений */
+#residentialTableContainer {
+    display: none;
+}
+
+#residentialTableContainer:not(.hidden) {
+    display: block !important;
+}
+
+#residentialTableContainer .hidden {
+    display: none !important;
 }
 
 /* Медиа-запрос для устройств с шириной экрана более 768px */
