@@ -48,7 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!validateInputs()) return;
 
             const tableContainer = document.getElementById('consumptionTableContainer');
-            if (tableContainer) tableContainer.classList.remove('hidden');
+if (tableContainer) {
+    tableContainer.classList.remove('hidden');
+    tableContainer.style.display = '';
+}
 
             fillConsumptionTable();
         });
@@ -62,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('cleanNetworkSection')?.addEventListener('click', function() {
     const container = document.getElementById('networkSectionsContainer');
     if (container) {
-        // Подтверждение перед удалением
         if (confirm('Вы действительно хотите удалить все участки тепловой сети?')) {
             container.innerHTML = '';
         }
@@ -70,24 +72,24 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
 });
 
     function validateInputs() {
-        const requiredFields = [
-            document.getElementById('totalVolume')?.value,
-            document.getElementById('qValue')?.value,
-            document.getElementById('innerTemp')?.value,
-            document.getElementById('coldTemp')?.value,
-            document.getElementById('windowCoefficient')?.value,
-            document.getElementById('participationFactor')?.value,
-            document.getElementById('tariff')?.value,
-            document.getElementById('startDate')?.value,
-            document.getElementById('endDate')?.value
-        ];
+    const requiredFields = [
+        document.getElementById('totalVolume')?.value,
+        document.getElementById('qValue')?.value,
+        document.getElementById('innerTemp')?.value,
+        document.getElementById('coldTemp')?.value,
+        document.getElementById('windowCoefficient')?.value,
+        document.getElementById('participationFactor')?.value,
+        document.getElementById('tariff')?.value,
+        document.getElementById('startDate')?.value,
+        document.getElementById('endDate')?.value
+    ];
 
-        if (requiredFields.some(field => !field)) {
-            alert('Пожалуйста, заполните все необходимые поля!');
-            return false;
-        }
-        return true;
+    if (requiredFields.some(field => !field)) {
+        alert('Пожалуйста, заполните все необходимые поля!');
+        return false;
     }
+    return true;
+}
 
     function fillConsumptionTable() {
     const tableBody = document.querySelector('#consumptionTable tbody');
@@ -440,3 +442,209 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
         document.getElementById(`result-${sectionId}`).classList.remove('hidden');
     }
 });
+
+    // Обработчик кнопки "Распечатать расчет"
+    const printBtn = document.getElementById('printCalculationBtn');
+    if (printBtn) {
+        printBtn.addEventListener('click', function () {
+            // Проверяем, есть ли данные в таблице
+            const tableBody = document.querySelector('#consumptionTable tbody');
+            if (!tableBody || tableBody.children.length === 0) {
+                alert('Нет данных для печати. Сначала выполните расчет.');
+                return;
+            }
+
+            // Функция для форматирования даты в ДД.ММ.ГГГГ
+            function formatDate(dateString) {
+                if (!dateString) return 'Не указана';
+                const parts = dateString.split('-');
+                if (parts.length !== 3) return dateString;
+                return `${parts[2]}.${parts[1]}.${parts[0]}`;
+            }
+
+            // Получаем все необходимые данные для печати
+            const consumer = document.getElementById('consumer')?.value || 'Не указан';
+            const object = document.getElementById('object')?.value || 'Не указан';
+            const address = document.getElementById('address')?.value || 'Не указан';
+            const startDate = formatDate(document.getElementById('startDate')?.value);
+            const endDate = formatDate(document.getElementById('endDate')?.value);
+            const heatSource = document.getElementById('heatSource')?.selectedOptions[0]?.text || 'Не указан';
+            const tariff = document.getElementById('tariff')?.value || '0';
+            
+            // Получаем дополнительные данные для нежилых помещений
+            const coldTemp = document.getElementById('coldTemp')?.value || 'Не указана';
+            const occupiedVolume = document.getElementById('occupiedVolume')?.value || 'Не указан';
+            const innerTemp = document.getElementById('innerTemp')?.selectedOptions[0]?.text || 'Не указана';
+            const windowCoeff = document.getElementById('windowCoefficient')?.selectedOptions[0]?.text || 'Не указан';
+            
+            // Получаем значение Qот.час
+            let qHourly = '0.000000';
+            const hourlyResultElem = document.getElementById('hourlyResult');
+            if (hourlyResultElem && hourlyResultElem.textContent) {
+                qHourly = hourlyResultElem.textContent.trim();
+            } else {
+                const qMax = document.getElementById('qMax')?.value;
+                if (qMax && qMax !== '-' && !isNaN(parseFloat(qMax))) {
+                    qHourly = parseFloat(qMax).toFixed(6);
+                }
+            }
+
+            // Создаем окно для печати
+            const printWindow = window.open('', '_blank', 'width=1000,height=800');
+
+            if (!printWindow) {
+                alert('Пожалуйста, разрешите всплывающие окна для этого сайта.');
+                return;
+            }
+
+            // Копируем таблицу и данные в новое окно
+            const table = document.getElementById('consumptionTable').cloneNode(true);
+
+            // Формируем HTML для печати
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Расчет потребления теплоэнергии</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                            font-size: 14px;
+                            line-height: 1.4;
+                            color: #333;
+                        }
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 25px;
+                            border-bottom: 2px solid #333;
+                            padding-bottom: 15px;
+                        }
+                        .print-header h1 {
+                            font-size: 20px;
+                            margin: 0 0 5px 0;
+                            color: #2c3e50;
+                        }
+                        .print-header h3 {
+                            font-size: 16px;
+                            margin: 5px 0;
+                            font-weight: normal;
+                            color: #555;
+                        }
+                        .print-info {
+                            margin-bottom: 20px;
+                            padding: 10px;
+                            background-color: #f9f9f9;
+                            border-radius: 5px;
+                            border: 1px solid #ddd;
+                        }
+                        .print-info p {
+                            margin: 5px 0;
+                        }
+                        .print-info strong {
+                            font-weight: bold;
+                        }
+                        .print-info .highlight {
+                            color: #2c3e50;
+                            font-weight: bold;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                            font-size: 13px;
+                        }
+                        table th, table td {
+                            border: 1px solid #ddd;
+                            padding: 8px 10px;
+                            text-align: center;
+                        }
+                        table th {
+                            background-color: #f2f2f2;
+                            font-weight: bold;
+                        }
+                        table tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                        }
+                        table tfoot tr {
+                            background-color: #f2f2f2 !important;
+                            font-weight: bold;
+                        }
+                        .print-footer {
+                            margin-top: 30px;
+                            padding-top: 15px;
+                            border-top: 1px solid #ddd;
+                            text-align: center;
+                            font-size: 12px;
+                            color: #888;
+                        }
+                        .q-result {
+                            font-size: 16px;
+                            color: #28a745;
+                            font-weight: bold;
+                        }
+                        @media print {
+                            body { padding: 10px; }
+                            .no-print { display: none; }
+                            table { page-break-inside: avoid; }
+                            table tbody tr { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-header">
+                        <h1>Расчет нормативного потребления отопления по нагрузке</h1>
+                        <h3>Период расчета: ${startDate} - ${endDate}</h3>
+                    </div>
+
+                    <div class="print-info">
+                        <p><strong>Потребитель:</strong> ${consumer}</p>
+                        <p><strong>Объект:</strong> ${object}</p>
+                        <p><strong>Адрес:</strong> ${address}</p>
+                        <p><strong>Теплоисточник:</strong> ${heatSource}</p>
+                        <p><strong>Расчетная температура:</strong> ${coldTemp} °C</p>
+                        <p><strong>Занимаемый объем здания:</strong> ${occupiedVolume} м³</p>
+                        <p><strong>Температура внутреннего воздуха:</strong> ${innerTemp} °C</p>
+                        <p><strong>Коэффициент для зданий имеющих окна:</strong> ${windowCoeff}</p>
+                        <p><strong>Qот.час:</strong> <span class="q-result">${qHourly} Гкал/час</span></p>
+                        <p><strong>Тариф без НДС:</strong> ${tariff} руб.</p>
+                    </div>
+
+                    <h3 style="text-align: center; margin-bottom: 10px;">
+                        Расчет потребления Теплоэнергии
+                    </h3>
+
+                    ${table.outerHTML}
+
+                    <div class="print-footer">
+                        Дата формирования: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}
+                        <br>
+                        Документ сформирован автоматически
+                    </div>
+
+                    <div class="no-print" style="text-align: center; margin-top: 20px;">
+                        <button onclick="window.print()" style="padding: 10px 30px; font-size: 16px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            🖨️ Печать
+                        </button>
+                        <button onclick="window.close()" style="padding: 10px 30px; font-size: 16px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                            ✖ Закрыть
+                        </button>
+                    </div>
+
+                    <script>
+                        // Автоматически открываем диалог печати через 1 секунду
+                        // setTimeout(function() {
+                        //     window.print();
+                        // }, 1000);
+                    <\/script>
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+
+            // Фокус на новом окне
+            printWindow.focus();
+        });
+    }
