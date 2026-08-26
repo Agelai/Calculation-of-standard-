@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Проверяем наличие кнопки
     const calculateResidentialBtn = document.getElementById('calculateResidentialBtn');
 
-    // Обработчик изменения типа помещения
+       // Обработчик изменения типа помещения
     const typeSelect = document.getElementById('type');
     if (typeSelect) {
         typeSelect.addEventListener('change', function () {
@@ -122,12 +122,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const coefficientSection = document.getElementById('coefficientSection');
             const heatingLoadSection = document.getElementById('heatingLoadSection');
             const consumptionTableContainer = document.getElementById('consumptionTableContainer');
+            const factTemperaturesSection = document.getElementById('factTemperaturesSection');
 
             if (this.value === 'residential') {
                 // При выборе "Жилое помещение":
-                // Показываем блок residentialSection
                 if (residentialSection) residentialSection.classList.remove('hidden');
-                // Скрываем все блоки для нежилых помещений
                 if (initialDataSection) initialDataSection.classList.add('hidden');
                 if (coefficientSection) coefficientSection.classList.add('hidden');
                 if (heatingLoadSection) heatingLoadSection.classList.add('hidden');
@@ -135,22 +134,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     consumptionTableContainer.classList.add('hidden');
                     consumptionTableContainer.style.display = '';
                 }
-                // Таблица для жилых скрыта до нажатия кнопки "Рассчитать"
                 if (residentialTableContainer) {
                     residentialTableContainer.classList.add('hidden');
                     residentialTableContainer.style.display = '';
                 }
+                if (factTemperaturesSection) factTemperaturesSection.classList.add('hidden');
                 
-            } else if (this.value === 'non-residential') {
-                // При выборе "Нежилое помещение":
-                // Скрываем блок residentialSection и таблицу для жилых помещений
+            } else if (this.value === 'non-residential' || this.value === 'non-residential-fact') {
+                // При выборе "Нежилое помещение" или "Нежилое по факт. темп.":
                 if (residentialSection) residentialSection.classList.add('hidden');
                 if (residentialTableContainer) {
                     residentialTableContainer.classList.add('hidden');
                     residentialTableContainer.style.display = '';
                 }
                 
-                // Показываем блоки для нежилых (при наличии заполненных полей)
+                // Показываем/скрываем блок с фактическими температурами
+                if (factTemperaturesSection) {
+                    if (this.value === 'non-residential-fact') {
+                        factTemperaturesSection.classList.remove('hidden');
+                    } else {
+                        factTemperaturesSection.classList.add('hidden');
+                    }
+                }
+                
+                // Показываем блоки для нежилых
                 if (document.getElementById('consumer').value &&
                     document.getElementById('object').value &&
                     document.getElementById('address').value &&
@@ -160,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     if (initialDataSection) initialDataSection.classList.add('hidden');
                 }
-                // Скрываем таблицу для нежилых при переключении (но не через display: none, а через класс)
                 if (consumptionTableContainer) {
                     consumptionTableContainer.classList.add('hidden');
                     consumptionTableContainer.style.display = '';
@@ -170,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 
             } else {
                 // При выборе пустого значения:
-                // Скрываем все блоки и таблицы
                 if (residentialSection) residentialSection.classList.add('hidden');
                 if (residentialTableContainer) {
                     residentialTableContainer.classList.add('hidden');
@@ -183,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     consumptionTableContainer.classList.add('hidden');
                     consumptionTableContainer.style.display = '';
                 }
+                if (factTemperaturesSection) factTemperaturesSection.classList.add('hidden');
             }
         });
          setupAutoExpandInputs();
