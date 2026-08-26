@@ -91,6 +91,19 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
     return true;
 }
 
+   // Функция для получения фактической температуры месяца
+    function getFactTemperature(monthName) {
+        const input = document.getElementById(`factTemp_${monthName}`);
+        if (input && input.value) {
+            // Заменяем запятую на точку и парсим
+            const value = parseFloat(input.value.replace(',', '.'));
+            if (!isNaN(value)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
     function fillConsumptionTable() {
     const tableBody = document.querySelector('#consumptionTable tbody');
     const tableFooter = document.getElementById('tableFooter');
@@ -106,6 +119,7 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
     const tCold = parseFloat(document.getElementById('coldTemp').value);
     const dailyHeating = parseFloat(document.getElementById('dailyHeating').value);
     const tariff = parseFloat(document.getElementById('tariff').value);
+    const type = document.getElementById('type').value;
 
     let qHourly = parseFloat(document.getElementById('qMax').value);
     if (isNaN(qHourly)) {
@@ -130,6 +144,79 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
     let totalNetworkLoss = 0;
     let totalSumWithVAT = 0;
 
+    // Определяем, используем ли фактические температуры
+    const useFactTemps = (type === 'non-residential-fact');
+
+    // Функция для получения температуры месяца
+    function getMonthTemperature(monthName) {
+        if (useFactTemps) {
+            const factTemp = getFactTemperature(monthName);
+            if (factTemp !== null) {
+                return factTemp;
+            }
+        }
+        return tempData[heatSource]?.[monthName];
+    }
+
+    // Вывод формулы с подставленными цифрами
+    let formulaContainer = document.getElementById('periodFormulaContainer');
+    if (!formulaContainer) {
+        const tableContainer = document.getElementById('consumptionTableContainer');
+        if (tableContainer) {
+            formulaContainer = document.createElement('div');
+            formulaContainer.id = 'periodFormulaContainer';
+            formulaContainer.className = 'formula-container';
+            formulaContainer.style.marginBottom = '15px';
+            const table = document.getElementById('consumptionTable');
+            if (table) {
+                tableContainer.insertBefore(formulaContainer, table);
+            } else {
+                tableContainer.prepend(formulaContainer);
+            }
+        }
+    }
+
+    // Формируем формулу с подставленными цифрами для первого месяца
+    if (formulaContainer) {
+        const currentMonthIndex = startDate.getMonth();
+        const monthName = monthNames[currentMonthIndex];
+        let tMonth = getMonthTemperature(monthName);
+        
+        if (tMonth !== undefined && tMonth !== null) {
+            const daysInMonth = new Date(startDate.getFullYear(), currentMonthIndex + 1, 0).getDate();
+            let heatingDays;
+            
+            if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
+                const timeDiff = endDate - startDate;
+                heatingDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+            } else {
+                heatingDays = daysInMonth - startDate.getDate() + 1;
+            }
+            
+            if (monthName === 'май') {
+                heatingDays = Math.min(heatingDays, maxDaysConfig[heatSource].may);
+            } else if (monthName === 'сентябрь') {
+                heatingDays = Math.min(heatingDays, maxDaysConfig[heatSource].september);
+            }
+            
+            const consumption = parseFloat((qHourly * (heatingDays * dailyHeating) *
+                ((tInner - tMonth) / (tInner - tCold))).toFixed(4));
+            
+            const factLabel = useFactTemps ? ' (факт.)' : '';
+            const formulaHtml = `
+                <div style="font-size: 13px; margin-bottom: 5px; font-weight: bold; color: #2c3e50;">
+                    Q = Qот.час × (tвн - tср.м) / (tвн - tн.р) × 24 × no
+                </div>
+                <div class="formula-container">
+                    Q = ${qHourly.toFixed(6)} × ((${tInner} - (${tMonth})) / (${tInner} - (${tCold}))) × 24 × ${heatingDays} = ${consumption.toFixed(4)} Гкал (за ${monthName}${factLabel})
+                </div>
+            `;
+            
+            formulaContainer.innerHTML = formulaHtml;
+            formulaContainer.style.display = 'block';
+        }
+    }
+
     // Обработка периода в пределах одного месяца
     if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
         const monthIndex = startDate.getMonth();
@@ -141,8 +228,8 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
             return;
         }
 
-        const tMonth = tempData[heatSource]?.[monthName];
-        if (typeof tMonth === 'undefined') return;
+        let tMonth = getMonthTemperature(monthName);
+        if (tMonth === undefined || tMonth === null) return;
 
         // Рассчитываем точное количество дней в периоде
         const timeDiff = endDate - startDate;
@@ -173,9 +260,10 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
         totalNetworkLoss += networkLoss;
         totalSumWithVAT += parseFloat(sumWithVAT);
 
+        const factLabel = useFactTemps ? ' (факт.)' : '';
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${monthName} ${year}</td>
+            <td>${monthName} ${year}${factLabel}</td>
             <td>${tMonth}</td>
             <td>${heatingDays}</td>
             <td>
@@ -188,7 +276,7 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
     } else {
         // Для периодов, охватывающих несколько месяцев
         const currentDate = new Date(startDate);
-        currentDate.setDate(1); // Начинаем с первого дня месяца
+        currentDate.setDate(1);
 
         while (currentDate <= endDate) {
             const monthIndex = currentDate.getMonth();
@@ -202,36 +290,30 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
                 continue;
             }
 
-            const tMonth = tempData[heatSource]?.[monthName];
-            if (typeof tMonth === 'undefined') {
+            let tMonth = getMonthTemperature(monthName);
+            if (tMonth === undefined || tMonth === null) {
                 currentDate.setMonth(monthIndex + 1, 1);
                 continue;
             }
 
             let heatingDays;
             if (currentDate.getMonth() === startDate.getMonth() && currentDate.getFullYear() === startDate.getFullYear()) {
-                // Первый месяц периода
                 heatingDays = daysInMonth - startDate.getDate() + 1;
             } else if (currentDate.getMonth() === endDate.getMonth() && currentDate.getFullYear() === endDate.getFullYear()) {
-                // Последний месяц периода
                 heatingDays = endDate.getDate();
             } else {
-                // Полные месяцы между началом и концом периода
                 heatingDays = daysInMonth;
             }
 
-            // Применяем ограничения для мая и сентября
             if (monthName === 'май') {
                 heatingDays = Math.min(heatingDays, maxDaysConfig[heatSource].may);
             } else if (monthName === 'сентябрь') {
                 heatingDays = Math.min(heatingDays, maxDaysConfig[heatSource].september);
             }
 
-            // Основное потребление
             const consumption = parseFloat((qHourly * (heatingDays * dailyHeating) *
                 ((tInner - tMonth) / (tInner - tCold))).toFixed(4));
             
-            // Потери тепловой сети (если были рассчитаны)
             let networkLoss = 0;
             if (networkLossHourly > 0) {
                 networkLoss = parseFloat((networkLossHourly * 24 * heatingDays).toFixed(4));
@@ -244,9 +326,10 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
             totalNetworkLoss += networkLoss;
             totalSumWithVAT += parseFloat(sumWithVAT);
 
+            const factLabel = useFactTemps ? ' (факт.)' : '';
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${monthName} ${year}</td>
+                <td>${monthName} ${year}${factLabel}</td>
                 <td>${tMonth}</td>
                 <td>${heatingDays}</td>
                 <td>
@@ -257,7 +340,6 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
             `;
             tableBody.appendChild(row);
 
-            // Переход к следующему месяцу
             currentDate.setMonth(monthIndex + 1, 1);
         }
     }
@@ -278,6 +360,7 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
         tableFooter.appendChild(footerRow);
     }
 }
+
     function addNetworkSection() {
         const container = document.getElementById('networkSectionsContainer');
         const sectionId = Date.now();
@@ -648,3 +731,4 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
             printWindow.focus();
         });
     }
+
