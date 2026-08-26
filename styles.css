@@ -66,6 +66,27 @@ h3 {
     font-size: 14px;
 }
 
+/* Стили для формулы расчета периода */
+#periodFormulaContainer {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 15px;
+}
+
+#periodFormulaContainer .formula-expression {
+    font-family: 'Courier New', monospace;
+    padding: 10px;
+    background-color: white;
+    margin: 8px 0;
+    border-left: 4px solid #28a745;
+    border-radius: 4px;
+    font-size: 14px;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
 /* Стили для автоматического расширения полей ввода */
 .auto-expand-input {
     min-width: 100px;
