@@ -49,6 +49,7 @@
                 <select id="type">
                     <option value="">-- Выберите --</option>
                     <option value="non-residential">Нежилое помещение</option>
+                    <option value="non-residential-fact">Нежилое по факт. темп.</option>
                     <option value="residential">Жилое помещение</option>
                 </select>
             </div>
@@ -238,6 +239,49 @@
                         </div>
                     </div>
 
+                     <!-- Фактические температуры по месяцам -->
+                        <div id="factTemperaturesSection" class="hidden" style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #dee2e6;">
+                            <h4 style="margin-top: 0; color: #2c3e50;">Введите фактическую температуру (°C):</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_январь" style="font-weight: normal;">Январь</label>
+                                    <input type="text" id="factTemp_январь" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_февраль" style="font-weight: normal;">Февраль</label>
+                                    <input type="text" id="factTemp_февраль" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_март" style="font-weight: normal;">Март</label>
+                                    <input type="text" id="factTemp_март" class="fact-temp-input" placeholder=""" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_апрель" style="font-weight: normal;">Апрель</label>
+                                    <input type="text" id="factTemp_апрель" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_май" style="font-weight: normal;">Май</label>
+                                    <input type="text" id="factTemp_май" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_сентябрь" style="font-weight: normal;">Сентябрь</label>
+                                    <input type="text" id="factTemp_сентябрь" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_октябрь" style="font-weight: normal;">Октябрь</label>
+                                    <input type="text" id="factTemp_октябрь" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_ноябрь" style="font-weight: normal;">Ноябрь</label>
+                                    <input type="text" id="factTemp_ноябрь" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                                <div class="form-row" style="flex-direction: column;">
+                                    <label for="factTemp_декабрь" style="font-weight: normal;">Декабрь</label>
+                                    <input type="text" id="factTemp_декабрь" class="fact-temp-input" placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+
                     <div class="add-network-section">
                         <label>Добавить участок тепловой сети</label>
                         <button id="addNetworkSection">+</button>
@@ -253,13 +297,12 @@
 
                     <!-- Таблица для нежилых помещений -->
                     <div id="consumptionTableContainer" class="hidden">
-                        <h3>Расчет потребления Теплоэнергии: <br> Q = Qот.час * (tвн -tср.м)/(tвн -t
-                            н.р)* 24 * no</h3>
+                        <h3>Расчет потребления Теплоэнергии:</h3>     <!--  <br> Q = Qот.час * (tвн -tср.м)/(tвн -tн.р)* 24 * no -->
                         <table id="consumptionTable">
                             <thead>
                                 <tr>
                                     <th>Месяц</th>
-                                    <th>tрасч.ср.мес (°C)</th>
+                                    <th>tсрм (°C)</th>
                                     <th>Кол-во дней отопл. в мес</th>
                                     <th>Объем потребления (Гкал)</th>
                                     <th>Тариф без НДС</th>
