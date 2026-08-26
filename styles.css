@@ -284,11 +284,10 @@ button:hover {
     background-color: #f9f9f9;
     border-radius: 5px;
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    flex-direction: row;
-    align-content: stretch;
-    justify-content: space-evenly;
-    align-items: baseline;
+    align-items: center;
+    
 }
 
 .add-network-section label {
@@ -299,6 +298,53 @@ button:hover {
 .add-network-section button {
     flex: 1;
     min-width: 80px;
+}
+
+/* Стили для кнопок + и - в блоке тепловой сети */
+.add-network-section .small-btn {
+    flex: 0 0 auto;
+    min-width: 35px;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+.add-network-section .small-btn#addNetworkSection {
+    background-color: rgb(72, 172, 235);
+}
+
+.add-network-section .small-btn#addNetworkSection:hover {
+    background-color: rgb(72, 172, 235);
+}
+
+.add-network-section .small-btn#cleanNetworkSection {
+    background-color: #dc3545;
+}
+
+.add-network-section .small-btn#cleanNetworkSection:hover {
+    background-color: #c82333;
+}
+
+@media (min-width: 480px) {
+    .add-network-section .small-btn {
+        min-width: 40px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .add-network-section .small-btn#addNetworkSection,
+    .add-network-section .small-btn#cleanNetworkSection {
+        margin-left: 0;
+    }
 }
 
 .network-section {
