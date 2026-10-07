@@ -686,10 +686,10 @@ document.getElementById('cleanNetworkSection')?.addEventListener('click', functi
                         <p><strong>Объект:</strong> ${object}</p>
                         <p><strong>Адрес:</strong> ${address}</p>
                         <p><strong>Теплоисточник:</strong> ${heatSource}</p>
-                        // <p><strong>Расчетная температура:</strong> ${coldTemp} °C</p>
+                      <!-- <p><strong>Расчетная температура:</strong> ${coldTemp} °C</p> -->
                         <p><strong>Занимаемый объем здания:</strong> ${occupiedVolume} м³</p>
-                        // <p><strong>Температура внутреннего воздуха:</strong> ${innerTemp} °C</p>
-                        // <p><strong>Коэффициент для зданий имеющих окна:</strong> ${windowCoeff}</p>
+                      <!-- <p><strong>Температура внутреннего воздуха:</strong> ${innerTemp} °C</p> -->
+                      <!-- <p><strong>Коэффициент для зданий имеющих окна:</strong> ${windowCoeff}</p> -->
                         <p><strong>Qот.час:</strong> <span class="q-result">${qHourly} Гкал/час</span></p>
                         <p><strong>Тариф без НДС:</strong> ${tariff} руб.</p>
                     </div>
